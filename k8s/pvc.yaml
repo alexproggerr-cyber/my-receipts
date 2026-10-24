@@ -1,0 +1,12 @@
+# Disk for the SQLite database and uploaded photos — survives pod restarts.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-receipts-storage
+  namespace: my-apps
+
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Gi

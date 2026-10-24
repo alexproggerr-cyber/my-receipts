@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-receipts
+  namespace: my-apps
+spec:
+  # SQLite is a single file on a single disk, so exactly one pod.
+  replicas: 1
+  strategy:
+    type: Recreate   # old pod releases the disk before the new one starts
+
+  selector:
+    matchLabels:
+      app: my-receipts
+
+  template:
+    metadata:
+      labels:
+        app: my-receipts
+
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      securityContext:
+        fsGroup: 33   # www-data, so Apache can write to the disk
+      initContainers:
+        # Not every volume type honours fsGroup, so hand the folders to www-data (uid 33).
+        - name: fix-permissions
+          image: busybox:1.36
+          command: ["sh", "-c", "mkdir -p /storage/data /storage/uploads && chown -R 33:33 /storage/data /storage/uploads"]
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+      containers:
+        - name: my-receipts
+          image: ghcr.io/alexproggerr-cyber/my-receipts:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/html/data
+              subPath: data
+            - name: storage
+              mountPath: /var/www/html/uploads
+              subPath: uploads
+          readinessProbe:
+            httpGet: { path: /index.php, port: 80 }
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /index.php, port: 80 }
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: my-receipts-storage

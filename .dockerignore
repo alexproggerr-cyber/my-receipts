@@ -1,0 +1,10 @@
+.claude
+_t
+k8s
+start.bat
+data/*.sqlite
+uploads/*
+!uploads/.htaccess
+.git
+.github
+.gitignore

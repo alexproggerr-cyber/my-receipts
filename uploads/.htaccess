@@ -1,0 +1,5 @@
+# В папке с картинками нельзя выполнять скрипты
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi|sh)$">
+    Require all denied
+</FilesMatch>
+php_flag engine off

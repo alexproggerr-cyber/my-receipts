@@ -1,0 +1,11 @@
+# База и загруженные фото — это данные, а не код
+data/*.sqlite
+data/*.sqlite-*
+uploads/*
+!uploads/.htaccess
+
+# Локальные настройки
+.claude/
+_t/
+.idea/
+.vscode/
