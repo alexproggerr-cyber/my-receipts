@@ -41,17 +41,17 @@ spec:
 
           volumeMounts:
             - name: storage
-              mountPath: /var/www/html/data
+              mountPath: /var/www/html/wife-reciepts/data
               subPath: data
             - name: storage
-              mountPath: /var/www/html/uploads
+              mountPath: /var/www/html/wife-reciepts/uploads
               subPath: uploads
           readinessProbe:
-            httpGet: { path: /index.php, port: 80 }
+            httpGet: { path: /wife-reciepts/index.php, port: 80 }
             initialDelaySeconds: 3
             periodSeconds: 10
           livenessProbe:
-            httpGet: { path: /index.php, port: 80 }
+            httpGet: { path: /wife-reciepts/index.php, port: 80 }
             initialDelaySeconds: 15
             periodSeconds: 20
           resources:

@@ -12,10 +12,10 @@ RUN { \
 # data/ и uploads/ в k8s монтируются с диска, и .htaccess из образа там не будет.
 COPY docker/apache-site.conf /etc/apache2/conf-enabled/recipes.conf
 
-COPY --chown=www-data:www-data . /var/www/html/
+COPY --chown=www-data:www-data . /var/www/html/wife-reciepts/
 
-RUN rm -rf /var/www/html/docker /var/www/html/k8s \
- && mkdir -p /var/www/html/data /var/www/html/uploads \
- && chown -R www-data:www-data /var/www/html/data /var/www/html/uploads
+RUN rm -rf /var/www/html/wife-reciepts/docker /var/www/html/wife-reciepts/k8s \
+ && mkdir -p /var/www/html/wife-reciepts/data /var/www/html/wife-reciepts/uploads \
+ && chown -R www-data:www-data /var/www/html/wife-reciepts/data /var/www/html/wife-reciepts/uploads
 
 EXPOSE 80

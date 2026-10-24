@@ -62,15 +62,15 @@ router.php         — защита служебных папок для вст�
 
 Если репозиторий называется не `my-receipts`, поправьте `image:` в `k8s/deployment.yaml`.
 
-Открыть сайт: узнайте порт `kubectl -n my-apps get svc my-receipts` и зайдите на `http://<IP-узла>:<NodePort>`,
-либо `kubectl -n my-apps port-forward svc/my-receipts 8080:80` → http://localhost:8080
+Открыть сайт: узнайте порт `kubectl -n my-apps get svc my-receipts` и зайдите на `http://<IP-узла>:<NodePort>/wife-reciepts/`,
+либо `kubectl -n my-apps port-forward svc/my-receipts 8080:80` → http://localhost:8080/wife-reciepts/
 
 Важно: база SQLite — один файл на диске, поэтому под всегда один (`replicas: 1`).
 Чтобы масштабировать на несколько подов, нужно перевести сайт на MySQL/PostgreSQL
 и хранить фото в S3-совместимом хранилище.
 
 Резервная копия базы:
-`kubectl -n my-apps cp <имя-пода>:/var/www/html/data/recipes.sqlite ./backup.sqlite`
+`kubectl -n my-apps cp <имя-пода>:/var/www/html/wife-reciepts/data/recipes.sqlite ./backup.sqlite`
 
 Забыли пароль — удалите строку из таблицы `users` (или весь файл `data/recipes.sqlite`,
 но тогда пропадут и рецепты), и при следующем входе админка предложит создать администратора заново.
